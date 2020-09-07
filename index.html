@@ -3,7 +3,104 @@
     <head>
         <title>Launch Checklist</title>
         <link rel = "stylesheet" type = "text/css" href = "styles.css" />
-        <script src = "script.js"></script>
+        <script>
+            window.addEventListener("load", function() {
+                //put fetch stuff in here
+                fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
+               response.json().then( function(json) {
+                  const div = document.getElementById("missionTarget");
+                  // Add HTML that includes the JSON data
+                  div.innerHTML = `
+                  <h2>Mission Destination</h2>
+                  <ol>
+                     <li>Name: ${json[3].name}</li>
+                    <li>Diameter: ${json[3].diameter}</li>
+                    <li>Star: ${json[3].star}</li>
+                    <li>Distance from Earth: ${json[3].distance}</li>
+                    <li>Number of Moons: ${json[3].moons}</li>
+                </ol>
+                <img src="${json[3].image}">
+                  `;
+               });
+            });
+         //});
+                /*
+                fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
+                        const missionDisplay = document.getElementById("missionTarget");
+                        missionDisplay.innerHTML = `
+                        <h2>Mission Destination</h2>
+                            <ol>
+                                <li id= "missionName">Name: ${json[3].name}</li>
+                                <li>Diameter: ${json[3].diameter}</li>
+                                <li>`tar: ${json[3].star}</li>
+                                <li>`Distance from Earth: ${json[3].distance}</li>
+                                <li>Number of Moons: ${json[3].moons}</li>
+                            </ol>
+                        <img src="https://mars.nasa.gov/system/resources/detail_files/7808_global-color-views-mars-PIA00407-full2.jpg">`;
+                    })
+                })*/
+                //end of fetch stuff
+                
+                let form = document.querySelector("form");
+                form.addEventListener("submit", function(event) {
+                    let pilot = document.querySelector("input[name=pilotName]")
+                    //alert("Pilot name: " + pilot.value);
+                    let copilot = document.querySelector("input[name=copilotName")
+                    //alert("Copilot name: " + copilot.value);
+                    let fuel = document.querySelector("input[name=fuelLevel]")
+                    //alert("Fuel level: " + fuel.value);
+                    let mass = document.querySelector("input[name=cargoMass]")
+
+                    //function to update pilot and co pilot values
+                    let inputs = []; 
+                    function storeInfo (event) {
+                        event.preventDefault();
+                        let pilotState = document.getElementById("pilotStatus");
+                        let copilotState = document.getElementById("copilotStatus");
+                        let boxToDisplay = document.getElementById('faultyItems');
+                        boxToDisplay.style.visibility = 'visible';
+                        const statusOfPilot = document.getElementById('pilotStatus');
+                        statusOfPilot.innerHTML = `${pilot.value} is ready`;
+                        const statusOfCopilot = document.getElementById('copilotStatus');
+                        statusOfCopilot.innerHTML = `${copilot.value} is ready`;
+
+                    }
+                    if (pilot.value === "" || copilot.value === "" || fuel.value === "" || fuel.value=== null || mass.value === "" || mass.value === null) {
+                        alert("All fields are required!");
+                        event.preventDefault();
+                    } else if (isNaN(fuel.value) || isNaN(mass.value) || typeof(pilot.value) !== 'string' || typeof(copilot.value) !== 'string') {
+                        alert("Fuel level and cargo mass should only be specified in numbers!");
+                        event.preventDefault();
+                    } else if (typeof(pilot.value) !== 'string' || typeof(copilot.value) !== 'string') {
+                        alert("Pilot and Copilot names should only contain a-z letters!");
+                    } else if (fuel.value < 10000){
+                        event.preventDefault();
+                        storeInfo(event);
+                        const statusOfFuel = document.getElementById('fuelStatus');
+                        statusOfFuel.innerHTML = `Fuel level of ${fuel.value} is not high enough for launch`
+                        const heading = document.getElementById('launchStatus');
+                        heading.style.color = 'red';
+                        heading.innerHTML = `Shuttle not ready for launch`
+
+                    } else if (mass.value > 100000) {
+                        event.preventDefault();
+                        storeInfo(event);
+                        const statusOfMass = document.getElementById('cargoStatus');
+                        statusOfMass.innerHTML = `Cargo mass of ${mass.value} is too heavy for launch`
+                        const heading = document.getElementById('launchStatus');
+                        heading.style.color = 'red';
+                        heading.innerHTML = `Shuttle not ready for launch`
+                    } else {
+                        event.preventDefault();
+                        storeInfo(event);
+                        const heading = document.getElementById('launchStatus');
+                        heading.style.color = 'green';
+                        heading.innerHTML = `Shuttle is ready to launch!`
+                    } 
+                })
+            })
+            
+        </script>
     </head>
     <body>
         <h1>Launch Checklist Form</h1>
@@ -30,7 +127,7 @@
         <div id="launchStatusCheck">
             <h2 id="launchStatus">Awaiting Information Before Launch</h2>
             <div  id="faultyItems">
-                <ol>
+                <ol id = "ol"> 
                     <li id="pilotStatus">Pilot Ready</li>
                     <li id="copilotStatus">Co-pilot Ready</li>
                     <li id="fuelStatus">Fuel level high enough for launch</li>
