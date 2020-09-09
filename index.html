@@ -38,7 +38,7 @@
                     //function to update pilot and co pilot values
                     let inputs = []; 
                     function storeInfo (event) {
-                        event.preventDefault();
+                        //event.preventDefault();
                         let pilotState = document.getElementById("pilotStatus");
                         let copilotState = document.getElementById("copilotStatus");
                         let boxToDisplay = document.getElementById('faultyItems');
@@ -49,14 +49,25 @@
                         statusOfCopilot.innerHTML = `${copilot.value} is ready`;
 
                     }
+                    function validate(str) {
+                        let strValue = str.value;
+                        var objRegExp  = /^[a-z]+$/;
+                        let a = objRegExp.test(strValue);
+                        if (a) {
+                            return 1;
+                        } else if (a !== 1) {return false;}
+                    }
+                    
+                    
                     if (pilot.value === "" || copilot.value === "" || fuel.value === "" || fuel.value=== null || mass.value === "" || mass.value === null) {
                         alert("All fields are required!");
                         event.preventDefault();
-                    } else if (isNaN(fuel.value) || isNaN(mass.value) || typeof(pilot.value) !== 'string' || typeof(copilot.value) !== 'string') {
+                    } else if (isNaN(fuel.value) || isNaN(mass.value)) {
                         alert("Fuel level and cargo mass should only be specified in numbers!");
                         event.preventDefault();
-                    } else if (typeof(pilot.value) !== 'string' || typeof(copilot.value) !== 'string') {
+                    } else if ((validate(pilot) !== 1)|| (validate(copilot) !== 1)) {
                         alert("Pilot and Copilot names should only contain a-z letters!");
+                        event.preventDefault();
                     } else if (fuel.value < 10000){
                         event.preventDefault();
                         storeInfo(event);
