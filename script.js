@@ -72,7 +72,7 @@ window.addEventListener("load", function() {
            heading.style.color = 'red';
            heading.innerHTML = `Shuttle not ready for launch`
 
-       } else if (mass.value > 100000) {
+       } else if (mass.value > 10000) {
            event.preventDefault();
            storeInfo(event);
            const statusOfMass = document.getElementById('cargoStatus');
