@@ -29,9 +29,11 @@ window.addEventListener("load", function() {
        let fuel = document.querySelector("input[name=fuelLevel]")
        //alert("Fuel level: " + fuel.value);
        let mass = document.querySelector("input[name=cargoMass]")
-
+       //statusOfFuel.innerHTML = `Fuel level of ${fuel.value} is ${isIsnt} high enough for launch`
        //function to update pilot and co pilot values
        let inputs = []; 
+       let statusOfFuel = document.getElementById('fuelStatus');
+       let statusOfCargo = document.getElementById('cargoStatus')
        function storeInfo (event) {
            //event.preventDefault();
            let pilotState = document.getElementById("pilotStatus");
@@ -64,10 +66,11 @@ window.addEventListener("load", function() {
            alert("Pilot and Copilot names should only contain a-z letters!");
            event.preventDefault();
        } else if (fuel.value < 10000){
+           let isIsnt = 'not'
            event.preventDefault();
            storeInfo(event);
-           const statusOfFuel = document.getElementById('fuelStatus');
-           statusOfFuel.innerHTML = `Fuel level of ${fuel.value} is not high enough for launch`
+           let statusOfFuel = document.getElementById('fuelStatus');
+           statusOfFuel.innerHTML = `Fuel level of ${fuel.value} is ${isIsnt} high enough for launch`
            const heading = document.getElementById('launchStatus');
            heading.style.color = 'red';
            heading.innerHTML = `Shuttle not ready for launch`
@@ -85,7 +88,9 @@ window.addEventListener("load", function() {
            storeInfo(event);
            const heading = document.getElementById('launchStatus');
            heading.style.color = 'green';
-           heading.innerHTML = `Shuttle is ready to launch!`
+           heading.innerHTML = `Shuttle is ready to launch!`;
+           statusOfFuel.innerHTML = `Fuel level of ${fuel.value} is high enough for takeoff`
+           statusOfCargo.innerHTML = `Cargo mass of ${mass.value} is low enough for takeoff`
        } 
    })
 })
